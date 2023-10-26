@@ -88,3 +88,25 @@ exports.deletePost = async function (req, res) {
         res.status(500).json({ message: error.message })
     }
 }
+
+exports.searchPosts = async function (req, res) {
+    try {
+        const { q } = req.query;
+        const searchResults = await Post.find({ $text: { $search: q } });
+
+        if (searchResults.length === 0) {
+            return res.status(404).json({ message: 'No Posts found' })
+        }
+
+        res.status(200).json(
+            searchResults.map(post => ({
+                postID: post._id,
+                content: post.content,
+                createdAt: post.createdAt
+            }))
+        )
+
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}

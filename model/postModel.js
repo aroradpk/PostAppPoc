@@ -6,4 +6,6 @@ const postSchema = new mongoose.Schema({
     updatedAt: {type: Date, default: Date.now}
 });
 
+postSchema.index({ content: 'text' });
+
 module.exports = mongoose.model('Post', postSchema);
